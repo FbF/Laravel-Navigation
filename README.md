@@ -40,6 +40,18 @@ The package comes with a View Composer which you can attach to any view in your 
 	// app/routes.php
 	View::composer('layouts.master', 'Fbf\LaravelNavigation\NavigationComposer');
 
+This is responsible for generating your menu data.
+
+Now to render the menus, you just need to do the following in your view:
+
+	{{ $MainNavigation }}
+
+This will render the 'Main' menu. If you had configured another menu called 'Footer', you would render this by adding the following to your view:
+
+	{{ $FooterNavigation }}
+
+Basically, whatever `types` you set up in the config file, that type's menu is in a view variable called "< type >Navigation".
+
 ## Administrator
 
 You can use the excellent Laravel Administrator package by frozennode to administer your pages.
