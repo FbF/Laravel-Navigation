@@ -1,6 +1,6 @@
 {
     "name": "fbf/laravel-navigation",
-    "description": "A Laravel 4 Package for site navigation",
+    "description": "A Laravel 4 package for adding multiple, database driven, menus to a site",
     "license": "MIT",
     "authors": [
         {
