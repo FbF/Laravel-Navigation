@@ -29,20 +29,11 @@ return array(
 	 * @type array
 	 */
 	'columns' => array(
-	    // 'type' => array(
-	    //     'title' => 'Navigation type',
-	    // ),
 	    'path' => array(
 	        'title' => 'Path',
 	    ),
-	    // 'title' => array(
-	    //     'title' => 'Title',
-	    // ),
 	    'url' => array(
 	        'title' => 'URL',
-	    ),
-	    'class' => array(
-	        'title' => 'Class',
 	    ),
 	),
 
@@ -56,7 +47,7 @@ return array(
 	        'title' => 'Parent',
 	        'type' => 'relationship',
 	        'name_field' => 'path',
-	        'options_sort_field' => '`fbf_nav_items`.`type` asc,lft',
+	        'options_sort_field' => 'lft',
 	    ),
 	    'title' => array(
 	    	'title' => 'Title',
@@ -75,19 +66,11 @@ return array(
 	 * @type array
 	 */
 	'filters' => array(
-	    // 'type' => array(
-	    //     'title' => 'Navigation type',
-	    //     'type' => 'enum',
-	    //     'options' => Config::get('laravel-navigation::types'),
-	    // ),
 	    'title' => array(
 	        'title' => 'Title',
 	    ),
 	    'url' => array(
 	    	'title' => 'URL',
-	    ),
-	    'class' => array(
-	    	'title' => 'Class',
 	    ),
 	),
 
@@ -120,7 +103,7 @@ return array(
 	 * @type array
 	 */
 	'sort' => array(
-	    'field' => 'type` asc,`lft',
+	    'field' => 'lft',
 	    'direction' => 'asc',
 	),
 
