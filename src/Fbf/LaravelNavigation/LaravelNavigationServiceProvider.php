@@ -21,15 +21,6 @@ class LaravelNavigationServiceProvider extends ServiceProvider {
 		$this->package('fbf/laravel-navigation');
 
     	\App::register('Baum\BaumServiceProvider');
-
-    	\App::register('Menu\MenuServiceProvider');
-
-        // Shortcut so developers don't need to add an Alias in app/config/app.php
-        $this->app->booting(function()
-        {
-            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Menu', 'Menu\Menu');
-        });
 	}
 
 	/**
