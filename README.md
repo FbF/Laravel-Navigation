@@ -29,9 +29,9 @@ Ensure the navigation `types` are set correctly in the config file
 
 Run the seed (this will create root nodes for each of your navigation `types`)
 
-	php artisan db:seed --class=Fbf\\LaravelNavigation\\NavItemsTableSeeder
+	php artisan db:seed --class=Fbf\LaravelNavigation\NavItemsTableSeeder
 
-Build your menus in the database, or if you are using FrozenNode's Laravel  Administrator, see the info below
+Build your menus in the database, or if you are using FrozenNode's Laravel Administrator, see the info below
 
 ## Usage
 

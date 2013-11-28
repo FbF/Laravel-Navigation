@@ -29,12 +29,15 @@ return array(
 	 * @type array
 	 */
 	'columns' => array(
-	    'path' => array(
-	        'title' => 'Path',
-	    ),
-	    'url' => array(
-	        'title' => 'URL',
-	    ),
+		'path' => array(
+			'title' => 'Path',
+		),
+		'uri' => array(
+			'title' => 'URI',
+		),
+		'class' => array(
+			'title' => 'Class',
+		),
 	),
 
 	/**
@@ -43,21 +46,25 @@ return array(
 	 * @type array
 	 */
 	'edit_fields' => array(
-	    'parent' => array(
-	        'title' => 'Parent',
-	        'type' => 'relationship',
-	        'name_field' => 'path',
-	        'options_sort_field' => 'lft',
-	    ),
-	    'title' => array(
-	    	'title' => 'Title',
-	    ),
-	    'url' => array(
-	    	'title' => 'URL',
-	    ),
-	    'class' => array(
-	    	'title' => 'Class',
-	    ),
+		'parent' => array(
+			'title' => 'Parent',
+			'type' => 'relationship',
+			'name_field' => 'path',
+			'options_sort_field' => 'lft',
+		),
+		'title' => array(
+			'title' => 'Title',
+		),
+		'uri' => array(
+			'title' => 'URI',
+		),
+		'descendants_routes' => array(
+			'title' => 'Descendants routes (if this item is for blog, but you also want it to be matched for blog/{slug} or blog/{year}/{month}, add those routes here)',
+			'type' => 'textarea',
+		),
+		'class' => array(
+			'title' => 'Class',
+		),
 	),
 
 	/**
@@ -66,12 +73,12 @@ return array(
 	 * @type array
 	 */
 	'filters' => array(
-	    'title' => array(
-	        'title' => 'Title',
-	    ),
-	    'url' => array(
-	    	'title' => 'URL',
-	    ),
+		'title' => array(
+			'title' => 'Title',
+		),
+		'uri' => array(
+			'title' => 'URI',
+		),
 	),
 
 	/**
@@ -82,9 +89,9 @@ return array(
 	 * @type closure
 	 */
 	'query_filter'=> function($query)
-	{
-	    $query->whereNotNull('parent_id');
-	},
+		{
+			$query->whereNotNull('parent_id');
+		},
 
 	/**
 	 * The validation rules for the form, based on the Laravel validation class
@@ -92,9 +99,9 @@ return array(
 	 * @type array
 	 */
 	'rules' => array(
-	    'parent_id' => 'required|integer|min:1',
-	    'title' => 'required',
-	    'url' => 'required',
+		'parent_id' => 'required|integer|min:1',
+		'title' => 'required',
+		'uri' => 'required',
 	),
 
 	/**
@@ -103,8 +110,8 @@ return array(
 	 * @type array
 	 */
 	'sort' => array(
-	    'field' => 'lft',
-	    'direction' => 'asc',
+		'field' => 'lft',
+		'direction' => 'asc',
 	),
 
 	/**
@@ -113,7 +120,7 @@ return array(
 	 * @type function
 	 */
 	'link' => function($model)
-	{
-	    return $model->url;
-	},
+		{
+			return $model->uri;
+		},
 );

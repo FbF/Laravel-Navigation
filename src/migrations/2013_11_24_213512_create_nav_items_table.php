@@ -25,7 +25,8 @@ class CreateNavItemsTable extends Migration {
       // Add needed columns here (f.ex: name, slug, path, etc.)
       // $table->string('name', 255);
       $table->string('title');
-      $table->string('url');
+      $table->string('uri');
+      $table->string('descendants_routes');
       $table->string('class');
 
       $table->timestamps();

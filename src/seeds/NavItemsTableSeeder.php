@@ -6,10 +6,13 @@ class NavItemsTableSeeder extends \Seeder {
     {
         \DB::table('fbf_nav_items')->delete();
         $types = \Config::get('laravel-navigation::types');
-        foreach ($types as $type)
-        $item = NavItem::create(array(
-        	'title' => $type,
-        ));
+        $roots = array_keys($types);
+        foreach ($roots as $root)
+        {
+	        NavItem::create(array(
+	            'title' => $root,
+	        ));
+        }
     }
 
 }
