@@ -9,6 +9,7 @@ class NavigationComposer {
 
 	protected $defaultOptions = array(
 		'from_depth' => 1,
+		'from_item_id' => null,
 		'max_depth' => null,
 		'root_element' => 'div',
 		'root_element_class' => 'menu',
@@ -104,7 +105,11 @@ class NavigationComposer {
 
 	protected function getNavigation()
 	{
-		if ($this->options['from_depth'] > 1 && !is_null($this->effectiveRouteNode))
+		if (!is_null($this->options['from_item_id']))
+		{
+			$navigationRootNode = NavItem::where('id','=',$this->options['from_item_id'])->first();
+		}
+		elseif ($this->options['from_depth'] > 1 && !is_null($this->effectiveRouteNode))
 		{
 			$navigationRootNode = $this->effectiveRouteNode->ancestorsAndSelf()->where('depth','=',($this->options['from_depth']-1))->first();
 		}

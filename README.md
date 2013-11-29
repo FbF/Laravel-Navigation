@@ -25,7 +25,7 @@ Run the migration
 
     php artisan migrate --package="fbf/laravel-navigation"
 
-Ensure the navigation `types` are set correctly in the config file
+Ensure the navigation `types` are set correctly in the config file. See the config file for comprehensive examples
 
 Run the seed (this will create root nodes for each of your navigation `types`)
 
