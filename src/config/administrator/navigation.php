@@ -94,6 +94,59 @@ return array(
 		},
 
 	/**
+	 * This is where you can define the model's custom actions
+	 */
+	'actions' => array(
+		// Ordering an item up / left
+		'order_up' => array(
+			'title' => 'Order Up / Left',
+			'messages' => array(
+				'active' => 'Reordering...',
+				'success' => 'Reordered',
+				'error' => 'There was an error while reordering',
+			),
+			'permission' => function($model)
+				{
+					if (!Request::segment(3))
+					{
+						return true;
+					}
+					$model = $model->where('id','=',Request::segment(3))->first();
+					return !is_null($model->getLeftSibling());
+				},
+			//the model is passed to the closure
+			'action' => function($model)
+				{
+					return $model->moveLeft();
+				}
+		),
+		// Ordering an item down / right
+		'order_down' => array(
+			'title' => 'Order Down / Right',
+			'messages' => array(
+				'active' => 'Reordering...',
+				'success' => 'Reordered',
+				'error' => 'There was an error while reordering',
+			),
+			'permission' => function($model)
+				{
+					if (!Request::segment(3))
+					{
+						return true;
+					}
+					$model = $model->where('id','=',Request::segment(3))->first();
+					return !is_null($model->getRightSibling());
+				},
+			//the model is passed to the closure
+			'action' => function($model)
+				{
+					return $model->moveRight();
+				}
+		),
+
+	),
+
+	/**
 	 * The validation rules for the form, based on the Laravel validation class
 	 *
 	 * @type array

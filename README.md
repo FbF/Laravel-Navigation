@@ -58,4 +58,4 @@ You can use the excellent Laravel Administrator package by frozennode to adminis
 
 http://administrator.frozennode.com/docs/installation
 
-A ready-to-use model config file for the NavItem model (navigation.php) is provided in the src/config/administrator directory of the package, which you can copy into the app/config/administrator directory (or whatever you set as the model_config_path in the administrator config file).
+A ready-to-use model config file for the NavItem model (navigation.php), including custom actions to reorder nodes in the hierarchy, is provided in the src/config/administrator directory of the package, which you can copy into the app/config/administrator directory (or whatever you set as the model_config_path in the administrator config file).
