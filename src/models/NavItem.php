@@ -26,20 +26,17 @@ class NavItem extends Node {
 
         parent::boot();
 
-        static::updating(function ($navItem) {
+	    static::updating(function ($navItem) {
+		    $dirty = $navItem->getDirty();
             $oldNavItem = self::where('id','=',$navItem->id)->first();
             $oldParent = $oldNavItem->parent;
             $oldParentId = $oldParent->id;
-            $navItem->oldParentId = $oldParentId;
-        });
-
-        static::updated(function ($navItem) {
-            if ($navItem->oldParentId != $navItem->parent->id)
-            {
-                $newParent = $navItem->parent;
-                $navItem->makeChildOf($newParent);
-            }
-        });
+		    if ( isset($dirty[$navItem->getParentColumnName()]) && $dirty[$navItem->getParentColumnName()] == $oldParentId )
+		    {
+			    unset($navItem->{$navItem->getParentColumnName()});
+			    static::$moveToNewParentId = FALSE;
+		    }
+	    });
 
     }
 
