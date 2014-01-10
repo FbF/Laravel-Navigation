@@ -35,7 +35,9 @@ class NavigationComposer {
 	protected $currentRouteNode = null;
 	protected $currentRouteAncestorNode = null;
 
- 	public function compose($view)
+	protected static $done = array();
+
+	public function compose($view)
 	{
 		$this->currentRouteNode = $this->effectiveRouteNode = $this->getNodeForCurrentRoute();
 		if (!$this->currentRouteNode)
@@ -51,12 +53,19 @@ class NavigationComposer {
 			}
 			foreach ($subtypes as $subtype => $options)
 			{
+				// Skip this subtype if we've done it already. Could have happened if we've attached the composer to
+				// more than one view file, e.g. a partial and a view and a layout.
+				if (in_array($subtype, self::$done))
+				{
+					continue;
+				}
 				$this->options = array_merge($this->defaultOptions, $options);
 				$this->type = $type;
 				$this->subtype = $subtype;
 				if ($this->options['show'] == self::SHOW_ALWAYS || ($this->options['show'] == self::SHOW_IF_CURRENT_ROUTE_IN_SECTION && $this->currentRouteInSection()))
 				{
 					$navigation = $this->getNavigation();
+					self::$done[] = $subtype;
 					$view->with($subtype.'Navigation', $navigation);
 				}
 			}

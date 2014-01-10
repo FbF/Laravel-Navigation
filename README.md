@@ -52,6 +52,18 @@ This will render the 'Main' menu. If you had configured another menu called 'Foo
 
 Basically, whatever `types` you set up in the config file, that type's menu is in a view variable called "< type >Navigation".
 
+If you need to a output a menu in a view file but you've attached the composer to a layout, e.g. you want to render a sidebar
+menu inside the pages.view view file, the $SidebarNavigation variable won't be available since the composer won't have executed
+yet, it runs when the master layout is rendered, which happens after your view. In this case, just attach the composer to the
+pages.view view as well as the layout. The view composer won't create them again. E.g.
+
+```php
+View::composer(array(
+	'layouts.master',
+	'laravel-pages::page',
+), 'Fbf\LaravelNavigation\NavigationComposer');
+```
+
 ## Administrator
 
 You can use the excellent Laravel Administrator package by frozennode to administer your pages.
