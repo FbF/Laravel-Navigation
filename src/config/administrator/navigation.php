@@ -56,7 +56,7 @@ return array(
 			'title' => 'Title',
 		),
 		'uri' => array(
-			'title' => 'URI',
+			'title' => 'URI (e.g. "/", "about" or "http://www.domain.com")',
 		),
 		'descendants_routes' => array(
 			'title' => 'Descendants routes (if this item is for blog, but you also want it to be matched for blog/{slug} or blog/{year}/{month}, add those routes here)',

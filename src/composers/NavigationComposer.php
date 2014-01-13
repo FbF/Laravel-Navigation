@@ -75,7 +75,7 @@ class NavigationComposer {
 	protected function getNodeForCurrentRoute()
 	{
 		$currentUri = \Request::path();
-		if ($navItem = NavItem::where('uri','=',$currentUri)->first())
+		if ($navItem = NavItem::where('uri','=',$currentUri)->orWhere('uri','=','/'.$currentUri)->first())
 		{
 			return $navItem;
 		}
@@ -284,7 +284,12 @@ class NavigationComposer {
 		{
 			return '<' . $this->options['current_item_content_element'] . '>' . $navItem->title . '</' . $this->options['current_item_content_element'] . '>';
 		}
-		return '<a href="/' . $navItem->uri . '" title="' . $navItem->title . '">' . $navItem->title . '</a>';
+		$uri = $navItem->uri;
+		if (substr($uri, 0, 1) != '/' && !filter_var($uri, FILTER_VALIDATE_URL))
+		{
+			$uri = '/' . $uri;
+		}
+		return '<a href="' . $uri . '" title="' . $navItem->title . '">' . $navItem->title . '</a>';
 	}
 
 }
