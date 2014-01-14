@@ -7,14 +7,23 @@ A Laravel 4 package for adding multiple, database driven, hierarchical menus to 
 
 Comes with:
 
-* Migration for the 'nav_items' table
+* Migration for the 'nav_items' table (includes fields for adding custom CSS class to an item, and 'descendant routes',
+which allow you to add route patterns which trigger things like the active_child class if the current route is
+effectively be a child of the current item, but there is no node in the database for the current route, e.g. you have a
+nav item called 'Blog' (which is routed through to your BlogController@index method) but not one for each individual
+Blog Post. Adding the route for the BlogPostController@view method to this field, e.g. 'blog/{slug}' will ensure the
+Blog menu item has the active child class, when you are viewing the Blog Post)
 * NavItem Model (that extends Baum/Node)
 * View Composer for generating all the menus
 * Sample FrozenNode/Administrator config file for managing the nav_items
 
-Menus can be traditional nested list style (e.g. multiple nested `ul` and `li` tags), or drop downs (`select` and `option` tags, where the value in child node `option` tags are prefixed with a string e.g. spaces or '..' repeated according to the node's depth).
+Menus can be traditional nested list style (e.g. multiple nested `ul` and `li` tags), or drop downs (`select` and
+`option` tags, where the value in child node `option` tags are prefixed with a string e.g. spaces or '..' repeated
+according to the node's depth).
 
-Once you've set up the hierarchy in the database, you can configure multiple menus to be generated from that single hierarchy. Different menus can include the same nodes, but used in different pages of your site, or different places on the same pages.
+Once you've set up the hierarchy in the database, you can configure multiple menus to be generated from that single
+hierarchy. Different menus can include the same nodes, but used in different pages of your site, or different places on
+the same pages.
 
 For each menu, you can control
 
@@ -126,4 +135,6 @@ You can use the excellent Laravel Administrator package by frozennode to adminis
 
 http://administrator.frozennode.com/docs/installation
 
-A ready-to-use model config file for the NavItem model (navigation.php), including custom actions to reorder nodes in the hierarchy, is provided in the src/config/administrator directory of the package, which you can copy into the app/config/administrator directory (or whatever you set as the model_config_path in the administrator config file).
+A ready-to-use model config file for the `NavItem` model (`navigation.php`), including custom actions to reorder nodes in
+the hierarchy, is provided in the `src/config/administrator` directory of the package, which you can copy into the
+`app/config/administrator` directory (or whatever you set as the `model_config_path` in the administrator config file).
