@@ -17,6 +17,7 @@ class NavigationComposer {
 		'list_element' => 'ul',
 		'root_list_class' => '',
 		'current_item_content_element' => 'span',
+		'item_content_depth_prefix' => '..',
 		'item_element' => 'li',
 		'item_class' => '',
 		'active_child_class' => 'menu--item__selected-child',
@@ -148,19 +149,18 @@ class NavigationComposer {
 		$numItemsInLevel = count($navItems);
 		for ($i = 1; $i <= $numItemsInLevel; $i++) {
 			$navItem = $navItems[$i-1];
-			$navigation .= $this->openItem($navItem, $i, $numItemsInLevel);
-			$navigation .= $this->itemContent($navItem);
+			$navigation .= $this->openItem($navItem, $i, $numItemsInLevel, $level);
 			if ((is_null($this->options['max_depth'])
 					|| $depth < $this->options['max_depth'])
 				&& ($this->options['show_children'] == self::SHOW_CHILDREN_ALWAYS
 					|| ($this->options['show_children'] == self::SHOW_CHILDREN_IF_PARENT_OF_CURRENT_ROUTE
 						&& !is_null($this->effectiveRouteNode)
-						&& $navItem->isSelfOrAncestorOf($this->effectiveRouteNode))))
+						&& ($navItem->isSelfOrAncestorOf($this->effectiveRouteNode)))))
 			{
 				$childrenNavItems = $navItem->getImmediateDescendants();
 				if (!$childrenNavItems->isEmpty())
 				{
-					$navigation .= $this->makeNavigation($childrenNavItems, ++$level);
+					$navigation .= $this->makeNavigation($childrenNavItems, $level+1);
 				}
 			}
 			$navigation .= $this->closeItem();
@@ -171,6 +171,10 @@ class NavigationComposer {
 
 	protected function openList($level)
 	{
+		if ($this->options['list_element'] == 'select' && $level > 0)
+		{
+			return;
+		}
 		$return = '';
 		if ($level == 0 && !empty($this->options['root_element']))
 		{
@@ -210,6 +214,10 @@ class NavigationComposer {
 
 	protected function closeList($level)
 	{
+		if ($this->options['list_element'] == 'select' && $level > 0)
+		{
+			return;
+		}
 		$return = '</' . $this->options['list_element'] . '>';
 		if ($level == 0 && !empty($this->options['root_element']))
 		{
@@ -230,66 +238,116 @@ class NavigationComposer {
 	 * @param $navItem
 	 * @param $pos
 	 * @param $last
+	 * @param $level
+	 * @internal param $level
 	 * @return string
 	 */
-	protected function openItem($navItem, $pos, $last)
+	protected function openItem($navItem, $pos, $last, $level)
 	{
 		$return = '<' . $this->options['item_element'];
-		$title = $navItem->title;
-		$classes = array();
-		if ($pos == 1 && !empty($this->options['first_class']))
+		if ($this->options['item_element'] == 'option')
 		{
-			$classes[] = $this->options['first_class'];
-		}
-		if ($pos == $last && !empty($this->options['last_class']))
-		{
-			$classes[] = $this->options['last_class'];
-		}
-		if (!is_null($this->effectiveRouteNode))
-		{
-			if (!is_null($this->currentRouteNode) && !empty($this->options['active_class']) && $navItem->equals($this->currentRouteNode))
+			$return .= ' value="' . $this->itemUri($navItem) . '"';
+			if ($this->isCurrent($navItem))
 			{
-				$classes[] = $this->options['active_class'];
-			}
-			elseif (!is_null($this->currentRouteNode) && !empty($this->options['active_child_class']) && $navItem->isAncestorOf($this->currentRouteNode))
-			{
-				$classes[] = $this->options['active_child_class'];
-			}
-			elseif (!is_null($this->currentRouteAncestorNode) && !empty($this->options['active_child_class']) && ($navItem->isAncestorOf($this->currentRouteAncestorNode) || $navItem->equals($this->currentRouteAncestorNode)))
-			{
-				$classes[] = $this->options['active_child_class'];
+				$return .= ' selected="selected"';
 			}
 		}
-		if (!empty($this->options['has_children_class']) && !$navItem->isLeaf())
+		else
 		{
-			$classes[] = $this->options['has_children_class'];
-		}
-		if (!empty($classes))
-		{
-			$return .= ' class="' . implode(' ', $classes) . '"';
+			$classes = array();
+			if ($pos == 1 && !empty($this->options['first_class']))
+			{
+				$classes[] = $this->options['first_class'];
+			}
+			if ($pos == $last && !empty($this->options['last_class']))
+			{
+				$classes[] = $this->options['last_class'];
+			}
+			if (!is_null($this->effectiveRouteNode))
+			{
+				if (!is_null($this->currentRouteNode) && !empty($this->options['active_class']) && $navItem->equals($this->currentRouteNode))
+				{
+					$classes[] = $this->options['active_class'];
+				}
+				elseif (!is_null($this->currentRouteNode) && !empty($this->options['active_child_class']) && $navItem->isAncestorOf($this->currentRouteNode))
+				{
+					$classes[] = $this->options['active_child_class'];
+				}
+				elseif (!is_null($this->currentRouteAncestorNode) && !empty($this->options['active_child_class']) && ($navItem->isAncestorOf($this->currentRouteAncestorNode) || $navItem->equals($this->currentRouteAncestorNode)))
+				{
+					$classes[] = $this->options['active_child_class'];
+				}
+			}
+			if (!empty($this->options['has_children_class']) && !$navItem->isLeaf())
+			{
+				$classes[] = $this->options['has_children_class'];
+			}
+			if (!empty($classes))
+			{
+				$return .= ' class="' . implode(' ', $classes) . '"';
+			}
 		}
 		$return .= '>';
+		$return .= $this->itemContent($navItem, $level);
+		if ($this->options['item_element'] == 'option')
+		{
+			$return .= '</' . $this->options['item_element'] . '>';
+		}
 		return $return;
 	}
 
 	protected function closeItem()
 	{
+		if ($this->options['item_element'] == 'option')
+		{
+			return;
+		}
 		$return = '</' . $this->options['item_element'] . '>';
 		return $return;
 	}
 
-	protected function itemContent($navItem)
+	protected function itemContent($navItem, $level)
 	{
-		if (!is_null($this->currentRouteNode) && $navItem->equals($this->currentRouteNode))
+		if ($this->options['item_element'] == 'option')
 		{
-			return '<' . $this->options['current_item_content_element'] . '>' . $navItem->title . '</' . $this->options['current_item_content_element'] . '>';
+			return $this->itemContentOption($navItem, $level);
 		}
+		return $this->itemContentLink($navItem);
+	}
+
+	protected function itemUri($navItem)
+	{
 		$uri = $navItem->uri;
 		if (substr($uri, 0, 1) != '/' && !filter_var($uri, FILTER_VALIDATE_URL))
 		{
 			$uri = '/' . $uri;
 		}
-		return '<a href="' . $uri . '" title="' . $navItem->title . '">' . $navItem->title . '</a>';
+		return $uri;
+	}
+
+	protected function isCurrent($navItem)
+	{
+		return !is_null($this->currentRouteNode) && $navItem->equals($this->currentRouteNode);
+	}
+
+	protected function itemContentLink($navItem)
+	{
+		if ($this->isCurrent($navItem))
+		{
+			return '<' . $this->options['current_item_content_element'] . '>' . $navItem->title . '</' . $this->options['current_item_content_element'] . '>';
+		}
+		return '<a href="' . $this->itemUri($navItem) . '" title="' . $navItem->title . '">' . $navItem->title . '</a>';
+	}
+
+	protected function itemContentOption($navItem, $level)
+	{
+		$title = $navItem->title;
+		if (!empty($this->options['item_content_depth_prefix']))
+		{
+			$title = str_repeat($this->options['item_content_depth_prefix'], $level) . $title;
+		}
+		return $title;
 	}
 
 }
