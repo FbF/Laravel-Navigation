@@ -85,7 +85,7 @@ class NavigationComposer {
 
 	protected function getAncestorNodeForCurrentRoute()
 	{
-		$currentRoute = \Route::currentRouteName();
+		$currentRoute = \Route::current()->getUri();
 		$currentRoute = preg_replace('/^(get|post|put|delete) /i', '', $currentRoute);
 		if ($navItem = NavItem::where('descendants_routes','LIKE','%'.$currentRoute.'%')->first())
 		{
