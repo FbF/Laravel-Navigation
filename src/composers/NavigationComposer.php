@@ -127,6 +127,10 @@ class NavigationComposer {
 		{
 			$navigationRootNode = NavItem::roots()->where('title','=',$this->type)->first();
 		}
+		if (!$navigationRootNode)
+		{
+			return false;
+		}
 		$firstLevelNavItems = $navigationRootNode->getImmediateDescendants();
 		$navigation = $this->makeNavigation($firstLevelNavItems);
 		return $navigation;
