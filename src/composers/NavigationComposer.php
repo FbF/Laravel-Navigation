@@ -25,6 +25,7 @@ class NavigationComposer {
 		'first_class' => 'menu--item__first',
 		'last_class' => 'menu--item__last',
 		'has_children_class' => 'menu--item__has-children',
+		'empty_item_value' => 'Please select',
 	);
 
 	protected $options = array();
@@ -209,6 +210,10 @@ class NavigationComposer {
 			$return .= ' class="' . implode(' ', $classes) . '"';
 		}
 		$return .= '>';
+		if ($this->options['list_element'] == 'select' && $level == 0 && !empty($this->options['empty_item_value']))
+		{
+			$return .= '<option>'.$this->options['empty_item_value'].'</option>';
+		}
 		return $return;
 	}
 
