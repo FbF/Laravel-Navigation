@@ -216,7 +216,7 @@ class NavigationComposer {
 		$return .= '>';
 		if ($this->options['list_element'] == 'select' && $level == 0 && !empty($this->options['empty_item_value']))
 		{
-			$return .= '<option>'.$this->options['empty_item_value'].'</option>';
+			$return .= '<option value="">'.$this->options['empty_item_value'].'</option>';
 		}
 		return $return;
 	}
